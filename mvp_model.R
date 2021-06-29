@@ -1,6 +1,6 @@
 ###### Script created to import, transform and analyze brazilian stock market prices ########
 ###### Optimization through the method of Minimum Portfolio Variance ########
-###### MaTheus Dias Ignacio S., Economist and Data Scientist ######
+###### Author: MaTheus Dias Ignacio S., Economist and Data Scientist ######
 
 #### Load required packages ######
 
@@ -105,7 +105,7 @@ Wmvp12 <- getWeights(globminPortfolio12)
 W <- rbind(c(Wmvp1),c(Wmvp2),c(Wmvp3),c(Wmvp4),c(Wmvp5),c(Wmvp6),c(Wmvp7),c(Wmvp8),c(Wmvp9),c(Wmvp10),c(Wmvp11),c(Wmvp12))
 
 
-####
+####### Minimum Portfolio Variance Return ####################
 
 RetMvp1 <- Wmvp1%*%t((Quotes[764,2:26]-Quotes[743,2:26])/Quotes[743,2:26])
 RetMvp2 <- Wmvp2%*%t((Quotes[782,2:26]-Quotes[764,2:26])/Quotes[764,2:26])
@@ -122,22 +122,22 @@ RetMvp12 <- Wmvp12%*%t((Quotes[989,2:26]-Quotes[970,2:26])/Quotes[970,2:26])
 
    
 
-###Monthly Return
+####### Monthly Return #####################################
 RetMensalMvp<-rbind(RetMvp1,RetMvp2, RetMvp3, RetMvp4, RetMvp5, RetMvp6, RetMvp7, RetMvp8, RetMvp9, RetMvp10, RetMvp11, RetMvp12)
 
-#Cumulated Return
+####### Cumulative Return ###################################
 RetMvpacum<-c((1+RetMvp1)*(1+RetMvp2)*(1+RetMvp3)*(1+RetMvp4)*(1+RetMvp5)*(1+RetMvp6)*(1+RetMvp7)*(1+RetMvp8)*(1+RetMvp9)*(1+RetMvp10)*(1+RetMvp11)*(1+RetMvp12))
 
-### Average of Monthly Return###
+###### Average of Monthly Return ###########################
 MeanRetMensalMvp<-mean(RetMensalMvp)
 MeanRetMensalMvp
 RetMensalMvp
 RetMvpacum
 
-##Monthly Variance##
+##### Monthly Variance ########################################
 SigmaMvp<- sqrt(var(RetMensalMvp))
 SigmaMvp
-### Sharpe Index ###
+### Sharpe Index ############################################
 
 SharperatioMvp<- (MeanRetMensalMvp - MeanRetcdi2017)/SigmaMvp
 SharperatioMvp
@@ -244,8 +244,6 @@ Wf <- rbind(c(Wmvpf1),c(Wmvpf2),c(Wmvpf3),c(Wmvpf4),c(Wmvpf5),c(Wmvpf6),c(Wmvpf7
 
 
 
-####
-
 RetMvpf1 <- Wmvpf1%*%t((Quotes[764,2:26]-Quotes[743,2:26])/Quotes[743,2:26])
 RetMvpf2 <- Wmvpf2%*%t((Quotes[782,2:26]-Quotes[764,2:26])/Quotes[764,2:26])
 RetMvpf3 <- Wmvpf3%*%t((Quotes[805,2:26]-Quotes[782,2:26])/Quotes[782,2:26])
@@ -262,21 +260,21 @@ RetMvpf12 <- Wmvpf12%*%t((Quotes[989,2:26]-Quotes[970,2:26])/Quotes[970,2:26])
 Wf
 
 
-###Rendimento Mensal Unifatorial
+### Unifactorial Monthly Return #########################
 RetMensalf<-c(RetMvpf1,RetMvpf2, RetMvpf3, RetMvpf4, RetMvpf5, RetMvpf6, RetMvpf7, RetMvpf8, RetMvpf9, RetMvpf10, RetMvpf11, RetMvpf12)
 
-####Rendimento Acumulado Unifatorial
+#### Unifactorial Cumulative Return #####################
 RetMvpacumf<-c((1+RetMvpf1)*(1+RetMvpf2)*(1+RetMvpf3)*(1+RetMvpf4)*(1+RetMvpf5)*(1+RetMvpf6)*(1+RetMvpf7)*(1+RetMvpf8)*(1+RetMvpf9)*(1+RetMvpf10)*(1+RetMvpf11)*(1+RetMvpf12))
 
-###Retorno M?dio Unifatorial###
+### Unifactorial Average return  #############################
 
 MeanRetMensalf<-mean(RetMensalf)
 
-###Desvio-padr?o mensal unifatorial###
+### Monthly Unifactorial standard deviation ######################
 Sigmaf<-sqrt(var(RetMensalf))
 
 
-####?ndice de Sharpe do Modelo unifatorial####
+#### Sharpe Index of Unifactorial model####
 Sharperatiof<- (MeanRetMensalf - MeanRetcdi2017)/Sigmaf
 
 
@@ -292,13 +290,13 @@ Sharperatiof
 
 
 
-#(3)# Portfolio MVP para Multifatorial.
+#(3)# Portfolio MVP .
 
 source("FunctionFactor.txt")
 
 Rm <- 100*log(Quotes[2:nrow(Quotes),27]/Quotes[1:(nrow(Quotes)-1),27])
-smb <- as.matrix(Quotes$SMB[-1]) # Tem que retirar a primeira linha para ficar com o mesmo nzmero de linhas de Rm. Como extrai os fatores prontos
-hml <- as.matrix(Quotes$HML[-1]) # tem o valor do fator na primeira observagco. Para Rm nco tem, perde a primeira observagco ao calcular retorno.
+smb <- as.matrix(Quotes$SMB[-1]) # First line must be removed to match with Rm. 
+hml <- as.matrix(Quotes$HML[-1]) # In the first observation there's the value of the factor, but there isn't for the RM, so the first observation it's missing;
 
 
 mF <- cbind(Rm,smb,hml)
@@ -312,7 +310,7 @@ globminSpecFactors <- portfolioSpec() # Declare object fPortfolio
 setEstimator(globminSpecFactors) <- "VarcovFactor" 
 
 
-### Factors calc
+### Factors calculation #############
 Factors <- mF[493:742,]
 globminPortfolioMF1 <- minvariancePortfolio(data = r[493:742,], spec = globminSpecFactors , constraints= "LongOnly")
 WmvpMF1 <- getWeights(globminPortfolioMF1)
@@ -381,18 +379,18 @@ RetMvpMF11 <- WmvpMF11%*%t((Quotes[970,2:26]-Quotes[951,2:26])/Quotes[951,2:26])
 RetMvpMF12 <- WmvpMF12%*%t((Quotes[989,2:26]-Quotes[970,2:26])/Quotes[970,2:26])
 
 
-### Rendimento Mensal Multifatorial ####
+### Multifactorial Monthly Return ####
 RetMensalMF<-rbind(RetMvpMF1,RetMvpMF2, RetMvpMF3, RetMvpMF4, RetMvpMF5, RetMvpMF6, RetMvpMF7, RetMvpMF8, RetMvpMF9, RetMvpMF10, RetMvpMF11, RetMvpMF12)
 
-#### Rendimento Acumulado MultiFatorial ####
+#### Multifactorial Cumulative Return ####
 RetMvpacumF<-c((1+RetMvpMF1)*(1+RetMvpMF2)*(1+RetMvpMF3)*(1+RetMvpMF4)*(1+RetMvpMF5)*(1+RetMvpMF6)*(1+RetMvpMF7)*(1+RetMvpMF8)*(1+RetMvpMF9)*(1+RetMvpMF10)*(1+RetMvpMF11)*(1+RetMvpMF12))
 
 MeanRetMensalMF<-mean(RetMensalMF)
 
-### Desvio-Padr?o Retorno Mensal Multifatorial ###
+### Standard Deviation of Multifactorial Monthly Return ###
 SigmaMF<-sqrt(var(RetMensalMF))
 
-#####?ndice de Sharpe###
+##### Sharpe Index###
 SharperatioMF<- (MeanRetMensalMF - MeanRetcdi2017)/SigmaMF
 
 RetMensalMF
@@ -401,7 +399,7 @@ MeanRetMensalMF
 SigmaMF
 SharperatioMF
 
-###Retornos do Ibovespa####
+### Ibovespa Monthly Return ####
 
 RetIbov1<- (Quotes[764,27]-Quotes[743,27])/(Quotes[743,27])
 RetIbov2<- (Quotes[782,27]-Quotes[764,27])/(Quotes[764,27])
@@ -417,15 +415,16 @@ RetIbov11<-(Quotes[970,27]-Quotes[951,27])/(Quotes[951,27])
 RetIbov12<-(Quotes[989,27]-Quotes[970,27])/(Quotes[970,27])
 
 
-###Rendimento Mensal Ibovespa
+### Ibovespa Monthly Return ######
 RetMensalIbov<-c(RetIbov1,RetIbov2, RetIbov3, RetIbov4, RetIbov5, RetIbov6, RetIbov7, RetIbov8, RetIbov9, RetIbov10, RetIbov11, RetIbov12)
 
-####Rendimento Acumulado Ibovespa
+#### Ibovespa Cumulative Return
 RetacumIbov<-c((1+RetIbov1)*(1+RetIbov2)*(1+RetIbov3)*(1+RetIbov4)*(1+RetIbov5)*(1+RetIbov6)*(1+RetIbov7)*(1+RetIbov8)*(1+RetIbov9)*(1+RetIbov10)*(1+RetIbov11)*(1+RetIbov12))
 
 MeanRetMensalIbov<-mean(RetMensalIbov)
 SigmaIbov<-sqrt(var(RetMensalIbov))
 
+#### Print #####
 RetMensalIbov
 RetacumIbov
 MeanRetMensalIbov
