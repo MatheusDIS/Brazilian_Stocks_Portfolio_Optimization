@@ -308,11 +308,11 @@ VarcovFactor(r)
 
 
 
-globminSpecFactors <- portfolioSpec() # Declara objeto fPortfolio 
-setEstimator(globminSpecFactors) <- "VarcovFactor" #Especifica a varcov do estimada com o modelo fatorial
+globminSpecFactors <- portfolioSpec() # Declare object fPortfolio 
+setEstimator(globminSpecFactors) <- "VarcovFactor" 
 
 
-###C?lculo dos fatores
+### Factors calc
 Factors <- mF[493:742,]
 globminPortfolioMF1 <- minvariancePortfolio(data = r[493:742,], spec = globminSpecFactors , constraints= "LongOnly")
 WmvpMF1 <- getWeights(globminPortfolioMF1)
@@ -366,7 +366,7 @@ WMF<-rbind(c(WmvpMF1),c(WmvpMF2),c(WmvpMF3),c(WmvpMF4),c(WmvpMF5),c(WmvpMF6),c(W
 WMF
 
 
-###Retorno mensais####
+### Monthly Returns ####
 RetMvpMF1 <- WmvpMF1%*%t((Quotes[764,2:26]-Quotes[743,2:26])/Quotes[743,2:26])
 RetMvpMF2 <- WmvpMF2%*%t((Quotes[782,2:26]-Quotes[764,2:26])/Quotes[764,2:26])
 RetMvpMF3 <- WmvpMF3%*%t((Quotes[805,2:26]-Quotes[782,2:26])/Quotes[782,2:26])
@@ -381,15 +381,15 @@ RetMvpMF11 <- WmvpMF11%*%t((Quotes[970,2:26]-Quotes[951,2:26])/Quotes[951,2:26])
 RetMvpMF12 <- WmvpMF12%*%t((Quotes[989,2:26]-Quotes[970,2:26])/Quotes[970,2:26])
 
 
-###Rendimento Mensal Multifatorial####
+### Rendimento Mensal Multifatorial ####
 RetMensalMF<-rbind(RetMvpMF1,RetMvpMF2, RetMvpMF3, RetMvpMF4, RetMvpMF5, RetMvpMF6, RetMvpMF7, RetMvpMF8, RetMvpMF9, RetMvpMF10, RetMvpMF11, RetMvpMF12)
 
-####Rendimento Acumulado MultiFatorial####
+#### Rendimento Acumulado MultiFatorial ####
 RetMvpacumF<-c((1+RetMvpMF1)*(1+RetMvpMF2)*(1+RetMvpMF3)*(1+RetMvpMF4)*(1+RetMvpMF5)*(1+RetMvpMF6)*(1+RetMvpMF7)*(1+RetMvpMF8)*(1+RetMvpMF9)*(1+RetMvpMF10)*(1+RetMvpMF11)*(1+RetMvpMF12))
 
 MeanRetMensalMF<-mean(RetMensalMF)
 
-###Desvio-Padr?o Retorno Mensal Multifatorial###
+### Desvio-Padr?o Retorno Mensal Multifatorial ###
 SigmaMF<-sqrt(var(RetMensalMF))
 
 #####?ndice de Sharpe###
