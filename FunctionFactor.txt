@@ -1,0 +1,23 @@
+###############################################################################
+#
+# Function Calcula retorno esperado e varcov com modelo multifatorial
+#
+#
+################################################################################
+
+VarcovFactor <- function(R,spec=NULL){
+
+R <- as.matrix(R)
+
+SigmaF <- cov(Factors)
+
+fit <- lm(R ~ Factors )
+
+
+list(mu = matrix(colMeans(R)),
+     Sigma = t(fit$coeff[2:4,])%*%SigmaF%*%fit$coeff[2:4,] + 
+     diag( diag( cov(fit$resid ) ), ncol(fit$resid ), ncol(fit$resid ))
+ )
+
+}
+
